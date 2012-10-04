@@ -1,0 +1,5 @@
+do{ my $x = {
+       'JcUtils-Logger-*' => 1,
+       'blib' => 1
+     };
+$x; }
