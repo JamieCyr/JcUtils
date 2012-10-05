@@ -29,7 +29,7 @@ do{ my $x = [
                                     'conflicts',
                                     'recommends'
                                   ],
-         'base_dir' => '/home/jamie/workspace/JcUtils',
+         'base_dir' => '/home/jamie/git/JcUtils/JcUtils',
          'allow_mb_mismatch' => 0,
          'xs_files' => undef,
          'destdir' => undef,
@@ -83,7 +83,7 @@ do{ my $x = [
                              ],
          'release_status' => 'stable',
          'needs_compiler' => '',
-         'orig_dir' => '/home/jamie/workspace/JcUtils',
+         'orig_dir' => '/home/jamie/git/JcUtils/JcUtils',
          'include_dirs' => [],
          'installdirs' => 'site',
          'mymetafile' => 'MYMETA.yml',
