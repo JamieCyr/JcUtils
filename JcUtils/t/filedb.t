@@ -1,4 +1,4 @@
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Test::Output;
 use JcUtils::Logger;
 use JcUtils::FileDB;
@@ -28,9 +28,11 @@ ok($defaultdb->create($entry), "create first entry");
 ok($defaultdb->create($entry), "create second entry");
 ok(-s "/tmp/defaultDbFile" > 1, "default DB file not empty");
 
-my $mydb = JcUtils::FileDB::new("/tmp/myDbFile", "/tmp/myLogFile");
+my $logger = JcUtils::Logger::new("/tmp/myLogfile");
+
+my $mydb = JcUtils::FileDB::new($logger, "/tmp/myDbFile");
 ok($mydb->openDb(), "open my DB");
-ok(-e "/tmp/myLogFile", "myLogFile file exists");
+ok(-e "/tmp/myLogfile", "myLogFile file exists");
 ok(-e "/tmp/myDbFile", "myDbFile file exists");
 ok($mydb->closeDb(), "close my DB");
 
@@ -72,8 +74,15 @@ ok ($mydb->update($entry), "update entry");
 
 ok ($mydb->recordCount() == 3, "Record count");
 
+my $hashDb = JcUtils::FileDB::new({
+	'dbFile'	=>	'/tmp/hashDbFile'
+});
+
+$hashDb->create($entry);
+ok(-s "/tmp/defaultDbFile" > 10, "hashDb test");
 #cleanup
 unlink ("/tmp/defaultDbFileLog");
 unlink ("/tmp/defaultDbFile");
 unlink ("/tmp/myDbFile");
-unlink ("/tmp/myLogFile");
+unlink ("/tmp/myLogfile");
+unlink ("/tmp/hashDbFile");

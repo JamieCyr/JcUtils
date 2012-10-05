@@ -32,15 +32,20 @@ it when necessary for a reading operation such at fetch();
 
 Perhaps a little code snippet.
 
-    use JcUtils::FileDB;
-
-    my $foo = JcUtils::FileDB->new();
-    ...
+    my $defaultdb = JcUtils::FileDB::new();
+    
+    my $logger = JcUtils::Logger::new("/tmp/myLogfile");
+    my $mydb = JcUtils::FileDB::new($logger, "/tmp/myDbFile");
+    
+    my $hashDb = JcUtils::FileDB::new({
+         'dbFile'	=>	'/tmp/hashDbFile',
+         'logger'	=>	$logger,
+         'maxRecords'	=> 10000
+    });
 
 =head1 EXPORT
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+None.
 
 =head1 SUBROUTINES/METHODS
 
@@ -55,15 +60,15 @@ our %defaults = (
 
 =head2 new()
 
-Cretes the new FileDb object
+Cretes the new FileDb object.  You can use a hasref or individule arguments in the correct order.
 
 =head3 Arguments
 
 =over 4
 
-=item 1. String, dbFile file name
+=item 1. Object, JcUtils::Logger, user provided logger
 
-=item 2. String, logfile file name
+=item 2. String, dbFile file name
 
 =item 3. Number, maxRecords size, the max amount of records in the DB
 
@@ -78,39 +83,61 @@ Cretes the new FileDb object
 =back
 
 =cut
+
 sub new {
 	my $self = bless {};
-	my %args;
+	my $args;
+	my $logger;
 	
-	($args{dbFile}, $args{dbLogFile}, $args{maxRecords}  ) = @_;
+	#did they pas a hashref
+	if (ref $_[0] eq 'HASH') {
+		$args = shift;
+		$self->{logger} = $args->{logger};
+		$logger = $self->{logger};
+	}
+	else {
+		$args = {};
+		#is the first argument a logger
+		my $obj = $_[0];
+		my $tmp = ref($obj);
+		if ($tmp eq 'JcUtils::Logger') {
+			($self->{logger}, $args->{dbFile}, $args->{maxRecords}  ) = @_;
+			$logger = $self->{logger};
+		}
+		else {
+			($args->{dbFile}, $args->{maxRecords}  ) = @_;
+		}
+	}
 	
-	if (defined($args{dbFile})){
-		$self->{dbFile} = $args{dbFile};
+	#do we need to create a defatult logger
+	if (!defined($logger)){
+		$self->{logger} = JcUtils::Logger::new($defaults{dbLogFile});
+		$logger = $self->{logger};
+		$logger->log("Created default logger");
+	}
+	else {
+		$logger->log("User provided logger");
+	}
+	
+	if (defined($args->{dbFile})){
+		$self->{dbFile} = $args->{dbFile};
 	}
 	else {
 		$self->{dbFile} = $defaults{dbFile};
 	}
 	
-	if (defined($args{maxRecords})) {
-		$self->{maxRecords} = $args{maxRecords};
+	if (defined($args->{maxRecords})) {
+		$self->{maxRecords} = $args->{maxRecords};
 	}
 	else {
 		$self->{maxRecords} = $defaults{maxRecords};
-	}
-	
-	if (defined($args{dbLogFile})){
-		$self->{dbLogFile} = $args{dbLogFile};
-	}
-	else {
-		$self->{dbLogFile} = $defaults{dbLogFile}
 	}
 	
 	$self->{logger} = JcUtils::Logger::new($self->{dbLogFile});
 	$self->{entryNum} = 0;
 	$self->{dbState} = CLOSED;
 	
-	my $logger = $self->{logger};
-	$logger->log("FileDb Ready");
+	$self->{logger}->log("FileDb Ready");
 	
 	return $self;
 }
@@ -287,6 +314,7 @@ acutally obtain the record.
 =back
 
 =cut
+
 sub find {
 	
 	my ($self, $key, $searchString, $ignoreCase) = @_;
@@ -362,6 +390,7 @@ Fetch a record from the db.  If it doesn't exist return empty hashref
 =back
 
 =cut
+
 sub fetch {
 	my ($self, $entry) = @_;
 	my $db_fh;
@@ -454,7 +483,7 @@ Convenience function that opens the flat file data base.
 
 =item 1. Number, 1 success.
 
-=item 2, Number, 0 failure.
+=item 2. Number, 0 failure.
 
 =back
 
@@ -483,7 +512,7 @@ Convenience function that closes the flat file data base.
 
 =item 1. Number, 1 success.
 
-=item 2, Number, 0 failure.
+=item 2. Number, 0 failure.
 
 =back
 
@@ -520,10 +549,11 @@ Jamie Cyr, C<< <jjcyr at yahoo.com> >>
 
 The ignore case option on find() is not implemented.
 
-Please report any bugs or feature requests to C<bug-. at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=.>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+=head2 delete()
 
+The delete() function is not yet implemented.
+
+Please report any bugs or feature requests to TBD.
 
 =head1 SUPPORT
 
@@ -531,32 +561,11 @@ You can find documentation for this module with the perldoc command.
 
     perldoc JcUtils::FileDB
 
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=.>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/.>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/.>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/./>
-
-=back
-
+You can also look for information at: TBD
 
 =head1 ACKNOWLEDGEMENTS
 
+None.
 
 =head1 LICENSE AND COPYRIGHT
 
@@ -567,7 +576,6 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
-
 
 =cut
 

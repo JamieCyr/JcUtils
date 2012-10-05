@@ -144,28 +144,33 @@ it when necessary for a reading operation such at \fIfetch()\fR;
 Perhaps a little code snippet.
 .PP
 .Vb 1
-\&    use JcUtils::FileDB;
-\&
-\&    my $foo = JcUtils::FileDB\->new();
-\&    ...
+\&    my $defaultdb = JcUtils::FileDB::new();
+\&    
+\&    my $logger = JcUtils::Logger::new("/tmp/myLogfile");
+\&    my $mydb = JcUtils::FileDB::new($logger, "/tmp/myDbFile");
+\&    
+\&    my $hashDb = JcUtils::FileDB::new({
+\&         \*(AqdbFile\*(Aq       =>      \*(Aq/tmp/hashDbFile\*(Aq,
+\&         \*(Aqlogger\*(Aq       =>      $logger,
+\&         \*(AqmaxRecords\*(Aq   => 10000
+\&    });
 .Ve
 .SH "EXPORT"
 .IX Header "EXPORT"
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+None.
 .SH "SUBROUTINES/METHODS"
 .IX Header "SUBROUTINES/METHODS"
 .SS "\fInew()\fP"
 .IX Subsection "new()"
-Cretes the new FileDb object
+Cretes the new FileDb object.  You can use a hasref or individule arguments in the correct order.
 .PP
 \fIArguments\fR
 .IX Subsection "Arguments"
-.IP "1. String, dbFile file name" 4
-.IX Item "1. String, dbFile file name"
+.IP "1. Object, JcUtils::Logger, user provided logger" 4
+.IX Item "1. Object, JcUtils::Logger, user provided logger"
 .PD 0
-.IP "2. String, logfile file name" 4
-.IX Item "2. String, logfile file name"
+.IP "2. String, dbFile file name" 4
+.IX Item "2. String, dbFile file name"
 .IP "3. Number, maxRecords size, the max amount of records in the \s-1DB\s0" 4
 .IX Item "3. Number, maxRecords size, the max amount of records in the DB"
 .PD
@@ -262,8 +267,8 @@ Convenience function that opens the flat file data base.
 .IP "1. Number, 1 success." 3
 .IX Item "1. Number, 1 success."
 .PD 0
-.IP "2, Number, 0 failure." 3
-.IX Item "2, Number, 0 failure."
+.IP "2. Number, 0 failure." 3
+.IX Item "2. Number, 0 failure."
 .PD
 .SS "\fIopenDb()\fP"
 .IX Subsection "openDb()"
@@ -274,8 +279,8 @@ Convenience function that closes the flat file data base.
 .IP "1. Number, 1 success." 3
 .IX Item "1. Number, 1 success."
 .PD 0
-.IP "2, Number, 0 failure." 3
-.IX Item "2, Number, 0 failure."
+.IP "2. Number, 0 failure." 3
+.IX Item "2. Number, 0 failure."
 .PD
 .SH "AUTHOR"
 .IX Header "AUTHOR"
@@ -285,10 +290,11 @@ Jamie Cyr, \f(CW\*(C`<jjcyr at yahoo.com>\*(C'\fR
 .SS "Ignore Case"
 .IX Subsection "Ignore Case"
 The ignore case option on \fIfind()\fR is not implemented.
+.SS "\fIdelete()\fP"
+.IX Subsection "delete()"
+The \fIdelete()\fR function is not yet implemented.
 .PP
-Please report any bugs or feature requests to \f(CW\*(C`bug\-. at rt.cpan.org\*(C'\fR, or through
-the web interface at <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=.>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests to \s-1TBD\s0.
 .SH "SUPPORT"
 .IX Header "SUPPORT"
 You can find documentation for this module with the perldoc command.
@@ -297,25 +303,10 @@ You can find documentation for this module with the perldoc command.
 \&    perldoc JcUtils::FileDB
 .Ve
 .PP
-You can also look for information at:
-.IP "\(bu" 4
-\&\s-1RT:\s0 \s-1CPAN\s0's request tracker (report bugs here)
-.Sp
-<http://rt.cpan.org/NoAuth/Bugs.html?Dist=.>
-.IP "\(bu" 4
-AnnoCPAN: Annotated \s-1CPAN\s0 documentation
-.Sp
-<http://annocpan.org/dist/.>
-.IP "\(bu" 4
-\&\s-1CPAN\s0 Ratings
-.Sp
-<http://cpanratings.perl.org/d/.>
-.IP "\(bu" 4
-Search \s-1CPAN\s0
-.Sp
-<http://search.cpan.org/dist/./>
+You can also look for information at: \s-1TBD\s0
 .SH "ACKNOWLEDGEMENTS"
 .IX Header "ACKNOWLEDGEMENTS"
+None.
 .SH "LICENSE AND COPYRIGHT"
 .IX Header "LICENSE AND COPYRIGHT"
 Copyright 2012 Jamie Cyr.
