@@ -136,6 +136,8 @@ sub new {
 	$self->{entryNum} = 0;
 	$self->{dbState} = CLOSED;
 	
+	$self->openDb();
+	
 	$self->{logger}->log("FileDb Ready");
 	
 	return $self;
