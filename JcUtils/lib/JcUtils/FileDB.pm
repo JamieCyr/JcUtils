@@ -133,7 +133,6 @@ sub new {
 		$self->{maxRecords} = $defaults{maxRecords};
 	}
 	
-	$self->{logger} = JcUtils::Logger::new($self->{dbLogFile});
 	$self->{entryNum} = 0;
 	$self->{dbState} = CLOSED;
 	

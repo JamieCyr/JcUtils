@@ -80,6 +80,8 @@ my $hashDb = JcUtils::FileDB::new({
 
 $hashDb->create($entry);
 ok(-s "/tmp/defaultDbFile" > 10, "hashDb test");
+
+
 #cleanup
 unlink ("/tmp/defaultDbFileLog");
 unlink ("/tmp/defaultDbFile");
