@@ -324,6 +324,7 @@ sub find {
 	my $logger = $self->{logger};
 	my @results;
 	my $record = {};
+	my $entry;
 	
 	#We need at least the first two arguments
 	if (!defined($key)) {
@@ -349,7 +350,13 @@ sub find {
 		chomp $_;
 		$record = JSON::XS->new->decode($_);
 		if (exists $record->{$key}) {
-			if ($record->{$key} =~ m/$searchString/) {
+			$entry = $record->{$key};
+			if ($ignoreCase) {
+				$logger->log("Doing ignoring case search");
+				$searchString = lc($searchString);
+				$entry = lc($entry);
+			}
+			if ($entry =~ m/$searchString/) {
 				$logger->log("found entry $record->{UUID}");
 				push @results, $record->{UUID};
 			}
@@ -545,10 +552,6 @@ sub openDb {
 Jamie Cyr, C<< <jjcyr at yahoo.com> >>
 
 =head1 BUGS
-
-=head2 Ignore Case
-
-The ignore case option on find() is not implemented.
 
 =head2 delete()
 

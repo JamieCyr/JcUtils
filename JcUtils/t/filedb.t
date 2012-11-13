@@ -1,4 +1,4 @@
-use Test::More tests => 30;
+use Test::More tests => 32;
 use Test::Output;
 use JcUtils::Logger;
 use JcUtils::FileDB;
@@ -72,8 +72,14 @@ $update->{'another'} = 'test none';
 ok($mydb->update($update) == 0, "update no key");
 
 $entry = $mydb->fetch($id);
-$entry->{another} = 'test none';
-ok ($mydb->update($entry), "update entry");
+$entry->{another} = 'test None';
+ok ($mydb->update($entry), "upDate entry");
+
+my @ignoreResults = $mydb->find('another', 'test none', 1);
+ok (my $isize = @ignoreResults == 1, "Ignore case");
+
+my @nignoreResults = $mydb->find('another', 'test none');
+ok (my $nisize = @nignoreResults == 0, "Ignore case, fail");
 
 ok ($mydb->recordCount() == 3, "Record count");
 
