@@ -1,4 +1,4 @@
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::Output;
 use JcUtils::Logger;
 use JcUtils::FileDB;
@@ -53,6 +53,9 @@ ok(!exists $entry->{UUID}, "fetch record, not there");
 ok($mydb->find() == 0, "find no argument");
 my @fresults = $mydb->find('another', 'testnoe');
 ok(my $fsize = @fresults == 3, "find records");
+
+my @hresults = $mydb->find('another', 'estn');
+ok(my $hsize = @hresults == 3, "find contains records");
 
 my @nresults = $mydb->find();
 ok(my $nsize = @nresults == 0, "No arguments to find");

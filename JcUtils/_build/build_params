@@ -39,10 +39,10 @@ do{ my $x = [
          'test_file_exts' => [
                                '.t'
                              ],
-         'dist_name' => 'JcUtils-Logger',
+         'dist_name' => 'JcUtils',
          'has_config_data' => undef,
          'install_base' => undef,
-         'module_name' => 'JcUtils::Logger',
+         'module_name' => 'JcUtils',
          'recursive_test_files' => undef,
          'libdoc_dirs' => [
                             'blib/lib',

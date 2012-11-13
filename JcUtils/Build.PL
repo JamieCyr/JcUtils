@@ -4,7 +4,7 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new(
-    module_name         => 'JcUtils::Logger',
+    module_name         => 'JcUtils',
     license             => 'perl',
     dist_author         => q{Jamie Cyr <jjcyr@yahoo.com>},
     dist_version_from   => 'lib/JcUtils/Logger.pm',
@@ -14,7 +14,7 @@ my $builder = Module::Build->new(
     requires => {
         'perl' => 5.006,
     },
-    add_to_cleanup      => [ 'JcUtils-Logger-*' ],
+    add_to_cleanup      => [ 'JcUtils-*' ],
     create_makefile_pl => 'traditional',
 );
 

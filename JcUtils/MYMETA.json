@@ -12,11 +12,16 @@
       "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
       "version" : "2"
    },
-   "name" : "JcUtils-Logger",
+   "name" : "JcUtils",
    "prereqs" : {
       "build" : {
          "requires" : {
             "Test::More" : 0
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.38"
          }
       },
       "runtime" : {

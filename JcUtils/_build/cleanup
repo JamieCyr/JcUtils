@@ -1,6 +1,6 @@
 do{ my $x = {
-       'JcUtils-Logger-*' => 1,
-       'JcUtils-Logger-0.01' => 1,
+       'JcUtils-0.01' => 1,
+       'JcUtils-*' => 1,
        'blib' => 1
      };
 $x; }

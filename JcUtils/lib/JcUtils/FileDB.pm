@@ -292,7 +292,7 @@ sub delete {
 =head2 find()
 
 Find a record in the db, return an array of UUIDs, empty array if nothing was found.  Use fetch() method to
-acutally obtain the record.
+acutally obtain the record. The find() method will return any entry that contains the search string.
 
 =head3 Arguments
 
@@ -341,7 +341,7 @@ sub find {
 		$self->closeDb();
 	}
 	
-	open ($db_fh, "<$dbFile") || die "Could not open logfile: $self->{dbFile}: $!";
+	open ($db_fh, "<$dbFile") || die "Could not open database file: $self->{dbFile}: $!";
 	
 	$logger->log("Looking for $key, $searchString");
 	
@@ -349,7 +349,7 @@ sub find {
 		chomp $_;
 		$record = JSON::XS->new->decode($_);
 		if (exists $record->{$key}) {
-			if ($record->{$key} eq $searchString) {
+			if ($record->{$key} =~ m/$searchString/) {
 				$logger->log("found entry $record->{UUID}");
 				push @results, $record->{UUID};
 			}

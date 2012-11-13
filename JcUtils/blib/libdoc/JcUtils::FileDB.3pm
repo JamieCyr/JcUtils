@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "JcUtils::FileDB 3pm"
-.TH JcUtils::FileDB 3pm "2012-10-04" "perl v5.14.2" "User Contributed Perl Documentation"
+.TH JcUtils::FileDB 3pm "2012-11-12" "perl v5.14.2" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -216,7 +216,7 @@ Udate a record in the \s-1DB\s0
 .SS "\fIfind()\fP"
 .IX Subsection "find()"
 Find a record in the db, return an array of UUIDs, empty array if nothing was found.  Use \fIfetch()\fR method to
-acutally obtain the record.
+acutally obtain the record. The \fIfind()\fR method will return any entry that contains the search string.
 .PP
 \fIArguments\fR
 .IX Subsection "Arguments"
