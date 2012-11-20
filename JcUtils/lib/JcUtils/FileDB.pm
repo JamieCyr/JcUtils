@@ -134,6 +134,7 @@ sub new {
 	}
 	
 	$self->{entryNum} = 0;
+	$self->{nextIndex} = 0;
 	$self->{dbState} = CLOSED;
 	
 	$self->openDb();
@@ -287,6 +288,130 @@ sub update {
 
 sub delete {
 	
+}
+
+=head2 getNext()
+
+Return next record in the database.  Used in conjuction with the moreEntries() method.
+
+	my $entry = {};
+	while ($mydb->moreEntries()) {
+		$entry = $mydb->getNext();
+	}
+
+=head3 Arguments
+
+=head3 Return
+
+=over 2
+
+=item 1. Hashref, hash reference of the object.
+
+=back
+
+=cut
+
+sub getNext {
+	
+	my $self = shift;
+	
+	my $db_fh;
+	my $dbFile = $self->{dbFile};
+	my $logger = $self->{logger};
+	my $record = {};
+	my $i = 0;
+	
+	#Make sure the filehandle is closed.
+	if ($self->{dbState} == OPEN){
+		$self->closeDb();
+	}
+	
+	open ($db_fh, "<$dbFile") || die "Could not open data base file: $self->{dbFile}: $!";
+	
+	while (<$db_fh>) {
+		chomp $_;
+		$i++;
+		if ($i == $self->{nextIndex}) {
+			$record = JSON::XS->new->decode($_);
+			if (exists $record->{UUID}) {
+				$logger->log("returning entry $record->{UUID}");
+				return $record;
+			}
+		}
+	}
+	
+	$logger->warn->log("index out of range");
+	
+	close ($db_fh);
+	
+	return $record = {};
+	
+}
+
+=head2 moreEntries()
+
+Starts at an index and returns true until there are no other records.
+
+=head3 Argument
+
+=head3 Return
+
+=over 2
+
+=item 1. Number, 1 true 0, false
+
+=back
+
+=cut
+
+sub hasMoreEntries {
+	
+	my $self = shift;
+	my $count = $self->recordCount();
+	
+	if ($self->{nextIndex} < $count){
+		$self->{nextIndex}++;
+		return 1;
+	}
+	
+	#there's no more records, return index to 0
+	$self->{nextIndex} = 0;
+	return 0;
+}
+
+=head2 setIndex()
+
+Set the database index number.
+
+=head3 Arguments
+
+=over 2
+
+=item 1. Number, Index value
+
+=back
+
+=head3 Return
+
+=over 2
+
+=item 1. Number, 1 success, 0 failure
+
+=back
+
+=cut
+
+sub setIndex {
+	
+	my ($self, $i) = @_;
+	
+	if ($i > $self->recordCount()) {
+		$self->{nextIndex} = 0;
+		return 0;
+	}
+	$self->{nextIndex} = $i;
+	
+	return 1;
 }
 
 =head2 find()
@@ -467,7 +592,7 @@ sub recordCount {
 	}
 	
 	
-	open ($db_fh, "<$dbFile") || die "Could not open logfile: $self->{dbFile}: $!";
+	open ($db_fh, "<$dbFile") || die "Could not open database file: $self->{dbFile}: $!";
 	
 	$logger->log("Counting records");
 	

@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "JcUtils::FileDB 3pm"
-.TH JcUtils::FileDB 3pm "2012-11-12" "perl v5.14.2" "User Contributed Perl Documentation"
+.TH JcUtils::FileDB 3pm "2012-11-13" "perl v5.14.2" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -213,6 +213,35 @@ Udate a record in the \s-1DB\s0
 .IP "2. Number, 0 for failure." 3
 .IX Item "2. Number, 0 for failure."
 .PD
+.SS "\fIgetNext()\fP"
+.IX Subsection "getNext()"
+Return next record in the database.  Used in conjuction with the \fImoreEntries()\fR method.
+.PP
+.Vb 4
+\&        my $entry = {};
+\&        while ($mydb\->moreEntries()) {
+\&                $entry = $mydb\->getNext();
+\&        }
+.Ve
+.PP
+\fIArguments\fR
+.IX Subsection "Arguments"
+.PP
+\fIReturn\fR
+.IX Subsection "Return"
+.IP "1. Hashref, hash reference of the object." 2
+.IX Item "1. Hashref, hash reference of the object."
+.SS "\fImoreEntries()\fP"
+.IX Subsection "moreEntries()"
+Starts at an index and returns true until there are no other records.
+.PP
+\fIArgument\fR
+.IX Subsection "Argument"
+.PP
+\fIReturn\fR
+.IX Subsection "Return"
+.IP "1. Number, 1 true 0, false" 2
+.IX Item "1. Number, 1 true 0, false"
 .SS "\fIfind()\fP"
 .IX Subsection "find()"
 Find a record in the db, return an array of UUIDs, empty array if nothing was found.  Use \fIfetch()\fR method to

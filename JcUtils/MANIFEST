@@ -1,16 +1,22 @@
+.includepath
+.project
 Build.PL
 Changes
 ignore.txt
 lib/JcUtils/FileDB.pm
 lib/JcUtils/Logger.pm
 lib/JcUtils/SendGmail.pm
+Makefile.PL
 MANIFEST			This list of files
+META.json
+META.yml
 README
+scripts/test.pl
 t/00-load.t
 t/boilerplate.t
+t/filedb.t
+t/logger.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
-Makefile.PL
-META.yml
-META.json
+t/sendgmail.t

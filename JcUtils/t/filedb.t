@@ -1,4 +1,4 @@
-use Test::More tests => 32;
+use Test::More tests => 37;
 use Test::Output;
 use JcUtils::Logger;
 use JcUtils::FileDB;
@@ -62,6 +62,33 @@ ok(my $nsize = @nresults == 0, "No arguments to find");
 
 my @oresults = $mydb->find('uyy');
 ok(my $osize = @oresults == 0, "One arguments to find");
+
+my $centry = {};
+my $ccount = 0;
+while ($mydb->hasMoreEntries()) {
+	$centry = $mydb->getNext();
+	$ccount++
+}
+
+ok($ccount == 3, "get next");
+
+$ccount = 0;
+while ($mydb->hasMoreEntries()) {
+	$centry = $mydb->getNext();
+	$ccount++
+}
+ok($ccount == 3, "get next, again");
+
+ok($mydb->setIndex(99) == 0, "set index fail");
+ok($mydb->setIndex(2) == 1, "set index success");
+
+$ccount = 0;
+while ($mydb->hasMoreEntries()) {
+	$centry = $mydb->getNext();
+	$ccount++
+}
+
+ok($ccount == 1, "get after set correct index");
 
 my $update = {};
 	
