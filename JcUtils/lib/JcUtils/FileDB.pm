@@ -286,8 +286,79 @@ sub update {
 	
 }
 
+=head2 delete()
+
+Delete entry in the database.
+
+=head3 Arguments
+
+=over 2
+
+=item 1. Number, UUID of the record to delete
+
+=back
+
+=head3 Return
+
+=over 2
+
+=item 1. Number, 1 success, 0 failure
+
+=back
+
+=cut
+
 sub delete {
 	
+	my ($self, $entry) = @_;
+	my $db_fh;
+	my $tempdb_fh;
+	my $dbFile = $self->{dbFile};
+	my $logger = $self->{logger};
+	my $record = {};
+	my $deleted = 0;
+	
+	#We need the UUID argument
+	if (!defined($entry)) {
+		$logger->error->log("UUID argument was not provided");
+		return 0;
+	}
+	
+	#Make sure the filehandle is closed.
+	if ($self->{dbState} == OPEN){
+		$self->closeDb();
+	}
+	
+	
+	open ($db_fh, "<$dbFile") || die "Could not open database: $self->{dbFile}: $!";
+	open ($tempdb_fh, ">>$dbFile.tmp") || die "Could not open database: $dbFile.tmp: $!";
+	
+	$logger->log("Looking for $entry");
+	
+	while (<$db_fh>) {
+		chomp $_;
+		$record = JSON::XS->new->decode($_);
+		if (exists $record->{UUID}) {
+			if ($record->{UUID} eq $entry) {
+				$logger->log("deleting entry $record->{UUID}");
+				$deleted++;
+				next;
+			}
+		}
+		print $tempdb_fh $_ . "\n";
+	}
+	
+	close $db_fh;
+	close $tempdb_fh;
+	
+	unlink($dbFile) || die "Could not remove $dbFile $! \n";
+	rename("$dbFile.tmp", $dbFile) || die "Could not rename $dbFile.tmp to $dbFile $! \n";
+	
+	if ($deleted >= 1) {
+		return 1;
+	}
+	$logger->warn->log("Did not find UUID $entry to delete");
+	return 0;
 }
 
 =head2 getNext()

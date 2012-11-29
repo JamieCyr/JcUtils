@@ -1,4 +1,4 @@
-use Test::More tests => 37;
+use Test::More tests => 40;
 use Test::Output;
 use JcUtils::Logger;
 use JcUtils::FileDB;
@@ -115,7 +115,24 @@ my $hashDb = JcUtils::FileDB::new({
 });
 
 $hashDb->create($entry);
-ok(-s "/tmp/defaultDbFile" > 10, "hashDb test");
+ok(-s "/tmp/hashDbFile" > 10, "hashDb test");
+
+$entry->{another} = 'record two';
+$hashDb->create($entry);
+$entry->{another} = 'record three';
+$hashDb->create($entry);
+$entry->{another} = 'record four';
+$hashDb->create($entry);
+
+ok($hashDb->recordCount() == 4, "Adding to hashDb");
+
+@uuids = $hashDb->find("another", "record three");
+foreach $uuid (@uuids){
+	$hashDb->delete($uuid);
+}
+
+ok($hashDb->recordCount() == 3, "Delete a record");
+ok($hashDb->delete(4343) == 0, "Delete no entry");
 
 
 #cleanup

@@ -124,7 +124,7 @@
 .\" ========================================================================
 .\"
 .IX Title "JcUtils::FileDB 3pm"
-.TH JcUtils::FileDB 3pm "2012-11-13" "perl v5.14.2" "User Contributed Perl Documentation"
+.TH JcUtils::FileDB 3pm "2012-11-28" "perl v5.14.2" "User Contributed Perl Documentation"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -213,6 +213,19 @@ Udate a record in the \s-1DB\s0
 .IP "2. Number, 0 for failure." 3
 .IX Item "2. Number, 0 for failure."
 .PD
+.SS "\fIdelete()\fP"
+.IX Subsection "delete()"
+Delete entry in the database.
+.PP
+\fIArguments\fR
+.IX Subsection "Arguments"
+.IP "1. Number, \s-1UUID\s0 of the record to delete" 2
+.IX Item "1. Number, UUID of the record to delete"
+.PP
+\fIReturn\fR
+.IX Subsection "Return"
+.IP "1. Number, 1 success, 0 failure" 2
+.IX Item "1. Number, 1 success, 0 failure"
 .SS "\fIgetNext()\fP"
 .IX Subsection "getNext()"
 Return next record in the database.  Used in conjuction with the \fImoreEntries()\fR method.
@@ -242,6 +255,19 @@ Starts at an index and returns true until there are no other records.
 .IX Subsection "Return"
 .IP "1. Number, 1 true 0, false" 2
 .IX Item "1. Number, 1 true 0, false"
+.SS "\fIsetIndex()\fP"
+.IX Subsection "setIndex()"
+Set the database index number.
+.PP
+\fIArguments\fR
+.IX Subsection "Arguments"
+.IP "1. Number, Index value" 2
+.IX Item "1. Number, Index value"
+.PP
+\fIReturn\fR
+.IX Subsection "Return"
+.IP "1. Number, 1 success, 0 failure" 2
+.IX Item "1. Number, 1 success, 0 failure"
 .SS "\fIfind()\fP"
 .IX Subsection "find()"
 Find a record in the db, return an array of UUIDs, empty array if nothing was found.  Use \fIfetch()\fR method to
